@@ -23,7 +23,7 @@ def search(query):
         item_href = item.find("a").attrs["href"]
         # Put the results in the list to be returned
         if item_text and item_href:
-            result.append(ResultItem(item_text, item_href, "Bing"))
+            result.append(ResultItem(item_text, item_href))
     # Return the result list
     return result
 
