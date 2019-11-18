@@ -1,15 +1,22 @@
 import re
 
 class ResultItem:
+    HIGHESTRANK = 1
+    LOWESTRANK = 10
+
     title = ""
     url = ""
     engine = ""
+    rank = 9
     abstract = ""
 
     def __init__(self, title, url, engine):
         self.title = title
         self.url = url
         self.engine = engine
+
+    def add_rank(self, rank):
+        self.rank = rank
 
     def add_abstract(self, abstract):
         self.abstract = abstract

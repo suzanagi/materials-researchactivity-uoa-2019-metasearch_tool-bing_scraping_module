@@ -18,12 +18,16 @@ def search(query):
     # Obtain topics and URL element by the BeautifulSoup function
     results = soup.find("ol", {"id":"b_results"})
     lists = results.findAll("li", {"class":"b_algo"})
+    rank = 1
     for item in lists:
         item_text = item.find("a").text
         item_href = item.find("a").attrs["href"]
         # Put the results in the list to be returned
         if item_text and item_href:
-            result.append(ResultItem(item_text, item_href, "Bing"))
+            r_item = ResultItem(item_text, item_href, "Bing")
+            r_item.add_rank(rank)
+            result.append(r_item)
+            rank += 1
     # Return the result list
     return result
 
@@ -33,11 +37,13 @@ if __name__ == "__main__":
     query = sys.argv[1]
     # Append multiple query words with "+"
     for arg in sys.argv[2:]:
-        query = query + "+" + arg
+        query = query + '+' + arg
     # Experiment the search function
     result = search(query)
     # Print the result list to the command line
     for item in result:
         print("[title] "+item.title)
         print("[url] "+item.url)
+        print("[rank] "+str(item.rank))
+        print("\n")
 
