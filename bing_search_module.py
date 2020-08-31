@@ -4,17 +4,20 @@ from bs4 import BeautifulSoup
 from result_item import ResultItem
 
 def search(query):
+
     # Prepare a list for returning the search results
     result = list()
+    
     # Prepare a parameter for the given query
-    param = {"q": query}
     try:
         # Get the Bing search result page for the query
-        rt = requests.get("https://www.bing.com/search", params = param)
+        sent_url = "https://www.bing.com/search?q="+query+"&qs=n&form=QBRE&pq="+query
+        rt = requests.get(sent_url)
         # Analyse the result page using BeautifulSoup
         soup = BeautifulSoup(rt.text, "html.parser")
     except:
         print("Internet Disconnected. Connect to download text.")
+
     # Obtain topics and URL element by the BeautifulSoup function
     results = soup.find("ol", {"id":"b_results"})
     lists = results.findAll("li", {"class":"b_algo"})
@@ -22,6 +25,8 @@ def search(query):
     for item in lists:
         item_text = item.find("a").text
         item_href = item.find("a").attrs["href"]
+        print("item_text", item_text)
+        print("item_href", item_href)
         # Put the results in the list to be returned
         if item_text and item_href:
             r_item = ResultItem(item_text, item_href, "Bing")
@@ -35,6 +40,7 @@ def search(query):
 if __name__ == "__main__":
     # Prepare query vairable
     query = sys.argv[1]
+
     # Append multiple query words with "+"
     for arg in sys.argv[2:]:
         query = query + '+' + arg
